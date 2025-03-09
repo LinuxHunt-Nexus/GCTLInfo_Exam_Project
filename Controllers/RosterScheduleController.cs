@@ -1,8 +1,10 @@
 ﻿using GCTLInfo_Exam_Project.Data;
 using GCTLInfo_Exam_Project.Models;
+using GCTLInfo_Exam_Project.viewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace GCTLInfo_Exam_Project.Controllers
 {
@@ -21,51 +23,94 @@ namespace GCTLInfo_Exam_Project.Controllers
         }
         public async Task<IActionResult> GetAll()
         {
-            var rosterSchedules = await _context.RosterSchedules
-                .Include(r => r.Employee)
-                .Include(r => r.Shift)
-                .Select(r => new
-                {
-                    r.AI_ID,
-                    r.RosterScheduleCode,
-                    r.EmployeeID,
-                    EmployeeName = r.Employee != null ? r.Employee.Name : "N/A",
-                    Designation = r.Employee != null && r.Employee.Designation != null ? r.Employee.Designation.DesignationName : "N/A",
-                    Date = r.Date.ToString("yyyy-MM-dd"),
-                    DayOfWeek = r.Date.ToString("dddd"),
-                    ShiftName = r.Shift != null ? r.Shift.ShiftName : "N/A",
-                    ShiftStartTime = r.Shift != null ? r.Shift.ShiftStartTime.ToString("hh:mm tt") : "N/A",
-                    ShiftEndTime = r.Shift != null ? r.Shift.ShiftEndTime.ToString("hh:mm tt") : "N/A",
-                    r.Remarks
-                })
-                .ToListAsync();
+            try
+            {
+                var rosterSchedules = await _context.RosterSchedules
+                    .Include(r => r.Employee)
+                    .Include(r => r.Shift)
+                    .Select(r => new
+                    {
+                        r.AI_ID,
+                        r.RosterScheduleCode,
+                        r.EmployeeID,
+                        EmployeeName = r.Employee != null ? r.Employee.Name : "N/A",
+                        Designation = r.Employee != null && r.Employee.Designation != null ? r.Employee.Designation.DesignationName : "N/A",
+                        Date = r.Date.ToString("yyyy-MM-dd"),
+                        DayOfWeek = r.Date.ToString("dddd"),
+                        ShiftName = r.Shift != null ? r.Shift.ShiftName : "N/A",
+                        ShiftStartTime = r.Shift != null ? r.Shift.ShiftStartTime.ToString("hh:mm tt") : "N/A",
+                        ShiftEndTime = r.Shift != null ? r.Shift.ShiftEndTime.ToString("hh:mm tt") : "N/A",
+                        r.Remarks
+                    })
+                    .ToListAsync();
 
-            return Json(new { data = rosterSchedules });
+                return Json(new { data = rosterSchedules });
+            }
+            catch (Exception ex)
+            {
+                // Log the error or display a message
+                Console.WriteLine(ex.Message);
+                return Json(new { data = new List<object>() }); // return empty list in case of error
+            }
         }
+
 
         // GET: RosterSchedule/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewBag.Employees = new SelectList(_context.Employees, "EmployeeID", "Name");
-            ViewBag.Shifts = new SelectList(_context.Shifts, "ShiftCode", "ShiftName");
-            return View();
+            var model = new RosterScheduleEntryViewModel
+            {
+                Shifts = await _context.Shifts.ToListAsync(),
+                Employees = await (from emp in _context.Employees
+                                   join des in _context.Designations
+                                   on emp.DesignationCode equals des.DesignationCode
+                                   select new EmployeeViewModel
+                                   {
+                                       EmployeeID = emp.EmployeeID,
+                                       Name = emp.Name,
+                                       DesignationName = des.DesignationName
+                                   }).ToListAsync()
+            };
+
+            return View(model);
         }
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(RosterSchedule rosterSchedule)
+        public async Task<IActionResult> Create(RosterScheduleEntryViewModel model)
         {
-            if (ModelState.IsValid)
+            if (model.DateFrom > model.DateTo)
             {
-                _context.RosterSchedules.Add(rosterSchedule);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError("", "The 'Date From' must be earlier than 'Date To'.");
+                return View(model);
             }
 
-            ViewBag.Employees = new SelectList(_context.Employees, "EmployeeID", "Name", rosterSchedule.EmployeeID);
-            ViewBag.Shifts = new SelectList(_context.Shifts, "ShiftCode", "ShiftName");
-            return View(rosterSchedule);
+            if (model.SelectedEmployees == null || model.SelectedEmployees.Count == 0)
+            {
+                ModelState.AddModelError("", "Please select at least one employee.");
+                return View(model);
+            }
+            
+            foreach (var empID in model.SelectedEmployees)
+            {
+                var roster = new RosterSchedule
+                {
+                    EmployeeID = empID,
+                    ShiftCode = model.ShiftCode,
+                    Date = model.DateFrom,
+                    Remarks = "Auto-generated",
+                    EntryDate = DateTime.Now,
+                    RosterScheduleCode = $"RS-{DateTime.Now:yyyyMMddHHmmss}-{empID}"
+                };
+                _context.RosterSchedules.Add(roster);
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
+
 
         [HttpGet]
         public async Task<IActionResult> Edit(decimal id)

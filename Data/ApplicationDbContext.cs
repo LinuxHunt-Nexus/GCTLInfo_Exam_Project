@@ -7,42 +7,6 @@ namespace GCTLInfo_Exam_Project.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
-        /*public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
-        {
-        }
-        public DbSet<Employee> Employees { get; set; }
-        public DbSet<RosterSchedule> RosterSchedules { get; set; }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Ignore<IdentityUserLogin<string>>();
-            modelBuilder.Ignore<IdentityUserRole<string>>();
-            modelBuilder.Ignore<IdentityUserClaim<string>>();
-            modelBuilder.Ignore<IdentityUserToken<string>>();
-            modelBuilder.Ignore<IdentityUser<string>>();
-            modelBuilder.Ignore<IdentityRole<string>>();
-            modelBuilder.Ignore<IdentityRoleClaim<string>>();
-
-            // Employee Table Configuration
-            modelBuilder.Entity<Employee>()
-                .HasKey(e => e.EmployeeID);
-
-            // RosterSchedule Table Configuration
-            modelBuilder.Entity<RosterSchedule>()
-                .HasKey(r => r.AI_ID);
-
-            modelBuilder.Entity<RosterSchedule>()
-                .HasOne(r => r.Employee)
-                .WithMany()
-                .HasForeignKey(r => r.EmployeeID)
-                .HasPrincipalKey(e => e.EmployeeID)
-                .IsRequired(false);
-
-            modelBuilder.Entity<Employee>().ToTable("HRM_Employee");
-            modelBuilder.Entity<RosterSchedule>().ToTable("HRM_ATD_RosterScheduleEntry");
-        }*/
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
@@ -84,8 +48,14 @@ namespace GCTLInfo_Exam_Project.Data
             modelBuilder.Entity<Employee>()
                 .HasOne(e => e.Designation)
                 .WithMany()
-                .HasForeignKey(e => e.DesignationCode)
+                .HasForeignKey(e => e.DesignationID)  // **এখানে DesignationID ব্যবহার করুন**
                 .HasPrincipalKey(d => d.DesignationCode)
+                .IsRequired(false);
+            modelBuilder.Entity<Employee>()
+                .HasOne(e => e.Designation)
+                .WithMany()
+                .HasForeignKey(e => e.DesignationCode)  // Match this with your Employee table's column
+                .HasPrincipalKey(d => d.DesignationCode)  // Same here for the Designation table
                 .IsRequired(false);
 
             modelBuilder.Entity<RosterSchedule>()

@@ -1,50 +1,75 @@
-﻿@model GCTLInfo_Exam_Project.Models.RosterSchedule
+﻿<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 
-<h2>Create Roster Schedule</h2>
+<!-- Combined Form (Filter + Employee Table) -->
+<form method="post" action="@Url.Action("Create")">
+    @Html.AntiForgeryToken()
 
-<div class="row">
-    <div class="col-8 mx-auto">
-        <form asp-action="Create" method="post">
-            <!-- Validation Summary -->
-            @* <div asp-validation-summary="All" class="text-danger"></div> *@
-            <div class="form-group">
-                <label for="EmployeeID">Employee</label>
-                <select asp-for="EmployeeID" asp-items="ViewBag.Employees" class="form-control">
-                    <option value="">-- Select Employee --</option>
-                </select>
-                <span asp-validation-for="EmployeeID" class="text-danger"></span>
-            </div>
+    <!-- Filter Section: Date Range and Shift Selection -->
+    <div class="filter-section">
+        <label for="dateFrom">Date From:</label>
+        <input type="date" id="dateFrom" name="DateFrom" required/>
 
-            <div class="form-group">
-                <label asp-for="ShiftCode" class="control-label">Shift</label>
-                <select asp-for="ShiftCode" class="form-control" asp-items="ViewBag.Shifts">
-                    <option value="">-- Select Shift --</option>
-                </select>
-                <span asp-validation-for="ShiftCode" class="text-danger"></span>
-            </div>
+        <label for="dateTo">Date To:</label>
+        <input type="date" id="dateTo" name="DateTo" required/>
 
-            <div class="form-group">
-                <label for="RosterScheduleCode">Roster ScheduleCode</label>
-                <input type="text" asp-for="RosterScheduleCode" class="form-control" />
-                <span asp-validation-for="RosterScheduleCode" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label for="Date">Date</label>
-                <input type="date" asp-for="Date" class="form-control" />
-                <span asp-validation-for="Date" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label for="Remarks">Remarks</label>
-                <textarea asp-for="Remarks" class="form-control"></textarea>
-                <span asp-validation-for="Remarks" class="text-danger"></span>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Save</button>
-        </form>
+        <label for="shift">Select Shift:</label>
+        <select id="shift" name="ShiftCode">
+            @foreach (var shift in Model.Shifts)
+            {
+                <option value="@shift.ShiftCode">@shift.ShiftName</option>
+            }
+        </select>
     </div>
-</div>
 
+    <!-- Employee Table (DataTable) -->
+    <table id="employeeTable" class="display">
+        <thead>
+            <tr>
+                <th>Select</th>
+                <th>Emp. ID</th>
+                <th>Name</th>
+                <th>Designation</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var employee in Model.Employees)
+            {
+                <tr>
+                    <td><input type="checkbox" name="SelectedEmployees" value="@employee.EmployeeID" /></td>
+                    <td>@employee.EmployeeID</td>
+                    <td>@employee.Name</td>
+                    <td>@employee.DesignationName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-primary">Create Roster Schedule</button>
+</form>
 
+<!-- DataTables JavaScript -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#employeeTable').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "pageLength": 10,
+            "lengthMenu": [10, 25, 50, 100]
+        });
+
+        $('form').submit(function (event) {
+            var dateFrom = new Date($('#dateFrom').val());
+            var dateTo = new Date($('#dateTo').val());
+
+            if (dateFrom > dateTo) {
+                alert("The 'Date From' must be earlier than 'Date To'.");
+                event.preventDefault();
+            }
+        });
+    });
+</script>
