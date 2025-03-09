@@ -1,55 +1,95 @@
-﻿@model RosterSchedule
+﻿@model GCTLInfo_Exam_Project.viewModels.RosterScheduleEntryViewModel
 
 @{
-    ViewData["Title"] = "Edit Roster Schedule";
+    ViewData["Title"] = "Edit";
 }
 
-<h2>Edit Roster Schedule</h2>
+<!-- DataTables CSS -->
+<link href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" rel="stylesheet" />
 
-<div class="row">
-    <div class="col-8 mx-auto">
-        <form asp-action="Edit" method="post">
-            <!-- Validation Summary -->
-            @* <div asp-validation-summary="All" class="text-danger"></div> *@
+<!-- jQuery (required for DataTables) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-            <!-- Hidden ID Field -->
-            <input type="hidden" asp-for="AI_ID" />
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 
-            <div class="form-group">
-                <label for="EmployeeID">Employee</label>
-                <select asp-for="EmployeeID" asp-items="ViewBag.Employees" class="form-control">
-                    <option value="">-- Select Employee --</option>
-                </select>
-                <span asp-validation-for="EmployeeID" class="text-danger"></span>
-            </div>
+<!-- Filter Section: Date Range and Shift Selection -->
+@* <div class="filter-section">
+    <form method="post" action="@Url.Action("Edit")">
+        <label for="dateFrom">Date From:</label>
+        <input type="date" id="dateFrom" name="DateFrom" required value="@Model.DateFrom.ToString("yyyy-MM-dd")" />
 
-            <div class="form-group">
-                <label asp-for="ShiftCode" class="control-label"></label>
-                <select asp-for="ShiftCode" class="form-control" asp-items="ViewBag.Shifts">
-                    <option value="">-- Select Shift --</option>
-                </select>
-                <span asp-validation-for="ShiftCode" class="text-danger"></span>
-            </div>
+        <label for="dateTo">Date To:</label>
+        <input type="date" id="dateTo" name="DateTo" required value="@Model.DateTo.ToString("yyyy-MM-dd")" />
 
-            <div class="form-group">
-                <label for="RosterScheduleCode">Roster ScheduleCode</label>
-                <input type="text" asp-for="RosterScheduleCode" class="form-control" />
-                <span asp-validation-for="RosterScheduleCode" class="text-danger"></span>
-            </div>
+        <label for="shift">Select Shift:</label>
+        <select id="shift" name="ShiftCode" required>
+            @foreach (var shift in Model.Shifts)
+            {
+                <option value="@shift.ShiftCode" selected="@(shift.ShiftCode == Model.ShiftCode ? "selected" : "")">
+                    @shift.ShiftName
+                </option>
+            }
+        </select>
 
-            <div class="form-group">
-                <label for="Date">Date</label>
-                <input type="date" asp-for="Date" class="form-control" />
-                <span asp-validation-for="Date" class="text-danger"></span>
-            </div>
 
-            <div class="form-group">
-                <label for="Remarks">Remarks</label>
-                <textarea asp-for="Remarks" class="form-control"></textarea>
-                <span asp-validation-for="Remarks" class="text-danger"></span>
-            </div>
+        <button type="submit">Filter</button>
+    </form>
+</div> *@
 
-            <button type="submit" class="btn btn-primary">Save</button>
-        </form>
-    </div>
-</div>
+<!-- Employee Table (DataTable) -->
+<form method="post" action="@Url.Action("Edit")">
+
+    <label for="shift">Select Shift:</label>
+    <select asp-for="ShiftCode" asp-items="@(new SelectList(Model.Shifts, "ShiftCode", "ShiftName"))" required>
+        <option value="">Select Shift</option>
+    </select>
+
+    <label for="dateFrom">Date From:</label>
+    <input type="date" id="dateFrom" name="DateFrom" required value="@Model.DateFrom.ToString("yyyy-MM-dd")" />
+
+    <label for="dateTo">Date To:</label>
+    <input type="date" id="dateTo" name="DateTo" required value="@Model.DateTo.ToString("yyyy-MM-dd")" />
+
+    @Html.AntiForgeryToken()
+    <table id="employeeTable" class="display">
+        <thead>
+            <tr>
+                <th>Select</th>
+                <th>Emp. ID</th>
+                <th>Name</th>
+                <th>Designation</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var employee in Model.Employees)
+            {
+                <tr>
+                    <td><input type="checkbox" name="SelectedEmployees" value="@employee.EmployeeID" /></td>
+                    <td>@employee.EmployeeID</td>
+                    <td>@employee.Name</td>
+                    <td>@employee.DesignationName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-primary">Update Roster Schedule</button>
+</form>
+
+<!-- DataTables JavaScript -->
+<script>
+    $(document).ready(function () {
+        $('#employeeTable').DataTable({
+            "paging": true,        // ✅ pagination on
+            "searching": true,     // ✅ searching on
+            "ordering": true,      // ✅ sorting on
+            "pageLength": 10,      // Show 10 records per page
+            "lengthMenu": [10, 25, 50, 100] // User can select custom number of rows
+        });
+    });
+</script>
+

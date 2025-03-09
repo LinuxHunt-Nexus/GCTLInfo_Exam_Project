@@ -83,12 +83,33 @@
                     "data": "aI_ID",
                     "render": function (data) {
                         return `<a href="/RosterSchedule/Edit/${data}" class="btn btn-warning">Edit</a>
-                                <a href="/RosterSchedule/Delete/${data}" class="btn btn-danger">Delete</a>`;
+                                 <button class="btn btn-danger" onclick="deleteRoster(${data})">Delete</button>`;
                     }
                 }
             ]
         });
 
         
+
+        
     });
+    function deleteRoster(id) {
+        if (confirm("Are you sure you want to delete this record?")) {
+            fetch(`/RosterSchedule/Delete/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert("Deleted successfully!");
+                        $('#rosterScheduleTable').DataTable().ajax.reload();
+                    } else {
+                        alert("Failed to delete!");
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+        }
+    }
 </script>

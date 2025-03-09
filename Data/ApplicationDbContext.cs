@@ -48,14 +48,14 @@ namespace GCTLInfo_Exam_Project.Data
             modelBuilder.Entity<Employee>()
                 .HasOne(e => e.Designation)
                 .WithMany()
-                .HasForeignKey(e => e.DesignationID)  // **এখানে DesignationID ব্যবহার করুন**
+                .HasForeignKey(e => e.DesignationID)
                 .HasPrincipalKey(d => d.DesignationCode)
                 .IsRequired(false);
             modelBuilder.Entity<Employee>()
                 .HasOne(e => e.Designation)
                 .WithMany()
-                .HasForeignKey(e => e.DesignationCode)  // Match this with your Employee table's column
-                .HasPrincipalKey(d => d.DesignationCode)  // Same here for the Designation table
+                .HasForeignKey(e => e.DesignationCode) 
+                .HasPrincipalKey(d => d.DesignationCode)
                 .IsRequired(false);
 
             modelBuilder.Entity<RosterSchedule>()

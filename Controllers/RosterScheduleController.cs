@@ -116,7 +116,7 @@ namespace GCTLInfo_Exam_Project.Controllers
         public async Task<IActionResult> Edit(decimal id)
         {
             var rosterSchedule = await _context.RosterSchedules
-                .Include(r => r.Employee)
+                //.Include(r => r.Employee)
                 .Include(r => r.Shift)
                 .FirstOrDefaultAsync(r => r.AI_ID == id);
 
@@ -124,80 +124,86 @@ namespace GCTLInfo_Exam_Project.Controllers
             {
                 return NotFound();
             }
+            var model = new RosterScheduleEntryViewModel
+            {
+                AI_ID = rosterSchedule.AI_ID,
+                EmployeeID = rosterSchedule.EmployeeID,
+                ShiftCode = rosterSchedule.ShiftCode,
+                DateFrom = rosterSchedule.Date,
+                Remarks = rosterSchedule.Remarks,
+                Shifts = await _context.Shifts.ToListAsync(),
+                Employees = await (from emp in _context.Employees
+                                   join des in _context.Designations
+                                   on emp.DesignationCode equals des.DesignationCode
+                                   where emp.EmployeeID == rosterSchedule.EmployeeID
+                                   select new EmployeeViewModel
+                                   {
+                                       EmployeeID = emp.EmployeeID,
+                                       Name = emp.Name,
+                                       DesignationName = des.DesignationName
+                                   }).ToListAsync() 
+            };
 
-            ViewBag.Employees = new SelectList(_context.Employees, "EmployeeID", "Name", rosterSchedule.EmployeeID);
-            ViewBag.Shifts = new SelectList(_context.Shifts, "ShiftCode", "ShiftName", rosterSchedule.ShiftCode);
-
-            return View(rosterSchedule);
+            return View(model);
         }
+
 
         // POST: /RosterSchedule/Edit/{id}
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(decimal id, RosterSchedule rosterSchedule)
+        public async Task<IActionResult> Edit(RosterScheduleEntryViewModel model)
         {
-            if (id != rosterSchedule.AI_ID)
-            {
-                return NotFound();
-            }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
+                var rosterSchedule = await _context.RosterSchedules
+                    .FirstOrDefaultAsync(r => r.AI_ID == model.AI_ID);
+
+                if (rosterSchedule == null)
                 {
-                    _context.Update(rosterSchedule);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!RosterScheduleExists(rosterSchedule.AI_ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+
+                rosterSchedule.EmployeeID = model.EmployeeID;
+                rosterSchedule.ShiftCode = model.ShiftCode;
+                rosterSchedule.Date = model.DateFrom;
+                rosterSchedule.Remarks = model.Remarks;
+                rosterSchedule.ModifyDate = DateTime.Now;
+
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(rosterSchedule);
+
+            // If we reach here, something went wrong
+            model.Shifts = await _context.Shifts.ToListAsync();
+            model.Employees = await (from emp in _context.Employees
+                                     join des in _context.Designations
+                                     on emp.DesignationCode equals des.DesignationCode
+                                     select new EmployeeViewModel
+                                     {
+                                         EmployeeID = emp.EmployeeID,
+                                         Name = emp.Name,
+                                         DesignationName = des.DesignationName
+                                     }).ToListAsync();
+
+            return View(model);
         }
 
-
         // GET: RosterSchedule/Delete/5
+        [HttpDelete]
         public async Task<IActionResult> Delete(decimal id)
         {
-            var rosterSchedule = await _context.RosterSchedules
-                .Include(r => r.Employee)
-                .Include(r => r.Shift)
-                .FirstOrDefaultAsync(r => r.AI_ID == id);
-
+            var rosterSchedule = await _context.RosterSchedules.FindAsync(id);
             if (rosterSchedule == null)
             {
                 return NotFound();
             }
 
-            return View(rosterSchedule);
+            _context.RosterSchedules.Remove(rosterSchedule);
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
-
-
-        // POST: RosterSchedule/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(decimal id)
-        {
-            var rosterSchedule = _context.RosterSchedules.Find(id);
-
-            if (rosterSchedule != null)
-            {
-                _context.RosterSchedules.Remove(rosterSchedule);
-                _context.SaveChanges();
-            }
-
-            return RedirectToAction(nameof(Index));
-        }
-
 
         private bool RosterScheduleExists(decimal id)
         {
