@@ -1,0 +1,70 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\TEST FOLDER\\GCTLInfo_Exam_Project\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{BF5E46A0-7E22-4841-AE96-A4483AA4252A}|GCTLInfo_Exam_Project.csproj|d:\\test folder\\gctlinfo_exam_project\\controllers\\rosterschedulecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF5E46A0-7E22-4841-AE96-A4483AA4252A}|GCTLInfo_Exam_Project.csproj|solutionrelative:controllers\\rosterschedulecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF5E46A0-7E22-4841-AE96-A4483AA4252A}|GCTLInfo_Exam_Project.csproj|d:\\test folder\\gctlinfo_exam_project\\views\\rosterschedule\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{BF5E46A0-7E22-4841-AE96-A4483AA4252A}|GCTLInfo_Exam_Project.csproj|solutionrelative:views\\rosterschedule\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF5E46A0-7E22-4841-AE96-A4483AA4252A}|GCTLInfo_Exam_Project.csproj|d:\\test folder\\gctlinfo_exam_project\\views\\rosterschedule\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{BF5E46A0-7E22-4841-AE96-A4483AA4252A}|GCTLInfo_Exam_Project.csproj|solutionrelative:views\\rosterschedule\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 276,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Create.cshtml",
+              "DocumentMoniker": "D:\\TEST FOLDER\\GCTLInfo_Exam_Project\\Views\\RosterSchedule\\Create.cshtml",
+              "RelativeDocumentMoniker": "Views\\RosterSchedule\\Create.cshtml",
+              "ToolTip": "D:\\TEST FOLDER\\GCTLInfo_Exam_Project\\Views\\RosterSchedule\\Create.cshtml",
+              "RelativeToolTip": "Views\\RosterSchedule\\Create.cshtml",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAABIAAABGAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-08T16:16:43.022Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\TEST FOLDER\\GCTLInfo_Exam_Project\\Views\\RosterSchedule\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\RosterSchedule\\Index.cshtml",
+              "ToolTip": "D:\\TEST FOLDER\\GCTLInfo_Exam_Project\\Views\\RosterSchedule\\Index.cshtml",
+              "RelativeToolTip": "Views\\RosterSchedule\\Index.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABsAAAAgAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-08T15:53:17.476Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "RosterScheduleController.cs",
+              "DocumentMoniker": "D:\\TEST FOLDER\\GCTLInfo_Exam_Project\\Controllers\\RosterScheduleController.cs",
+              "RelativeDocumentMoniker": "Controllers\\RosterScheduleController.cs",
+              "ToolTip": "D:\\TEST FOLDER\\GCTLInfo_Exam_Project\\Controllers\\RosterScheduleController.cs",
+              "RelativeToolTip": "Controllers\\RosterScheduleController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAbAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-07T09:36:43.136Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+﻿@model RosterSchedule
+
+<h2>Are you sure you want to delete this schedule?</h2>
+
+<div class="row">
+    <div class="col-8 mx-auto">
+        <p><strong>RosterSchedule Code</strong> : @Model.RosterScheduleCode</p>
+        <p><strong>Employee</strong> : @Model.Employee.Name</p> <!-- Employee Name -->
+        <p><strong>Shift</strong> : @Model.Shift.ShiftName</p> <!-- Shift Name -->
+        <p><strong>Remarks</strong> : @Model.Remarks</p> <!-- Remarks -->
+
+        <form asp-action="Delete" method="post">
+            <input type="hidden" name="id" value="@Model.AI_ID" />
+            <button type="submit" class="btn btn-danger">Delete</button>
+            <a href="@Url.Action("Index")" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>

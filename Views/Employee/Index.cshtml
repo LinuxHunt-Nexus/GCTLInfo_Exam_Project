@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Employee>
+
+<h1>Employee</h1>
+
+<!-- DataTables CSS -->
+<link href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+<!-- jQuery (required for DataTables) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+
+<table id="rosterScheduleTable" class="display">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>EmployeeID</th>
+            <th>Employee Name</th>
+            <th>Designation Code</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Data will be populated here from the server -->
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function () {
+        // Initialize the DataTable
+        $('#rosterScheduleTable').DataTable({
+            "ajax": {
+                "url": "/Employee/GetAll",
+                "type": "GET",
+                "dataSrc": function (json) {
+                    console.log("API Response:", json);
+                    return json.data;
+                }
+            },
+            "columns": [
+                { "data": "aI_ID" },
+                { "data": "employeeID" },
+                { "data": "name" },
+                { "data": "designationCode" }
+            ]
+        });
+    });
+</script>

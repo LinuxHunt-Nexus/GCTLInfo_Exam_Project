@@ -1,0 +1,50 @@
+﻿@model GCTLInfo_Exam_Project.Models.RosterSchedule
+
+<h2>Create Roster Schedule</h2>
+
+<div class="row">
+    <div class="col-8 mx-auto">
+        <form asp-action="Create" method="post">
+            <!-- Validation Summary -->
+            @* <div asp-validation-summary="All" class="text-danger"></div> *@
+            <div class="form-group">
+                <label for="EmployeeID">Employee</label>
+                <select asp-for="EmployeeID" asp-items="ViewBag.Employees" class="form-control">
+                    <option value="">-- Select Employee --</option>
+                </select>
+                <span asp-validation-for="EmployeeID" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ShiftCode" class="control-label">Shift</label>
+                <select asp-for="ShiftCode" class="form-control" asp-items="ViewBag.Shifts">
+                    <option value="">-- Select Shift --</option>
+                </select>
+                <span asp-validation-for="ShiftCode" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="RosterScheduleCode">Roster ScheduleCode</label>
+                <input type="text" asp-for="RosterScheduleCode" class="form-control" />
+                <span asp-validation-for="RosterScheduleCode" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="Date">Date</label>
+                <input type="date" asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="Remarks">Remarks</label>
+                <textarea asp-for="Remarks" class="form-control"></textarea>
+                <span asp-validation-for="Remarks" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+</div>
+
+
+

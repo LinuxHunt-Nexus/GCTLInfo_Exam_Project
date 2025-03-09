@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35122.118
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GCTLInfo_Exam_Project", "GCTLInfo_Exam_Project.csproj", "{BF5E46A0-7E22-4841-AE96-A4483AA4252A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BF5E46A0-7E22-4841-AE96-A4483AA4252A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF5E46A0-7E22-4841-AE96-A4483AA4252A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF5E46A0-7E22-4841-AE96-A4483AA4252A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF5E46A0-7E22-4841-AE96-A4483AA4252A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {84451489-D28E-4314-B868-C43F08CBA2FC}
+	EndGlobalSection
+EndGlobal

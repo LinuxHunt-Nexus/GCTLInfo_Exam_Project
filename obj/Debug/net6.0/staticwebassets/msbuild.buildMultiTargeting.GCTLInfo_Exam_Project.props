@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\GCTLInfo_Exam_Project.props" />
+</Project>

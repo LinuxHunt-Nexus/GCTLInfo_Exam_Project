@@ -1,0 +1,94 @@
+﻿@model IEnumerable<RosterSchedule>
+
+<!-- DataTables CSS -->
+<link href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+<!-- jQuery (required for DataTables) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+
+<br />
+<div class="row">
+    <div class="col-6">
+        <h2 class="text-primary">Create Rostar Shedule </h2>
+    </div>
+    <div class="col-6 d-flex justify-content-end">
+        <a class="btn btn-primary" asp-action="Create"><i class="fas fa-plus"></i> &nbsp; Create New Shedule</a>
+    </div>
+</div>
+
+<table id="rosterScheduleTable" class="display">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>EmpID</th>
+            <th>Name</th>
+            <th>Designation</th>
+            <th>Date</th>
+            <th>Day</th>
+            <th>Shift</th>
+            <th>TimeFrom</th>
+            <th>To</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Data will be populated here from the server -->
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function () {
+        // Initialize the DataTable
+        $('#rosterScheduleTable').DataTable({
+            "ajax": {
+                "url": "/RosterSchedule/GetAll",
+                "type": "GET",
+                "dataSrc": function (json) {
+                    console.log("API Response:", json);
+                    return json.data;
+                }
+            },
+            "columns": [
+                { "data": "aI_ID" },
+                { "data": "employeeID" },
+                { "data": "employeeName" },
+                { "data": "designation" },
+                { 
+                    "data": "date",
+                    "render": function (data, type, row) {
+                        if (data) {
+                            return data.split("T")[0];
+                        }
+                        return "";
+                    }
+                },
+                { "data": "dayOfWeek" },
+                { "data": "shiftName" },
+                {
+                    "data": "shiftStartTime",
+                    "render": function (data) {
+                        return data ? data : "N/A";
+                    }
+                },
+                {
+                    "data": "shiftEndTime",
+                    "render": function (data) {
+                        return data ? data : "N/A";
+                    }
+                },
+                {
+                    "data": "aI_ID",
+                    "render": function (data) {
+                        return `<a href="/RosterSchedule/Edit/${data}" class="btn btn-warning">Edit</a>
+                                <a href="/RosterSchedule/Delete/${data}" class="btn btn-danger">Delete</a>`;
+                    }
+                }
+            ]
+        });
+
+        
+    });
+</script>
