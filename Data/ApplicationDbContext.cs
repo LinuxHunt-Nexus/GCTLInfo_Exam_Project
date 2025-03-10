@@ -17,10 +17,14 @@ namespace GCTLInfo_Exam_Project.Data
         public DbSet<RosterSchedule> RosterSchedules { get; set; }
         public DbSet<Shift> Shifts { get; set; }
         public DbSet<Designation> Designations { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<DeliveryInfo> DeliveryAddresses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<DeliveryInfo>().ToTable("DeliveryInfo");
 
             modelBuilder.Entity<Employee>()
                 .HasKey(e => e.EmployeeID);
